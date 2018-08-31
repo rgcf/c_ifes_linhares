@@ -5,76 +5,73 @@
 
 FILE *txt;
 char aux[1000][251];
-int carregados, i;
+int opcao, carregados, i, j;
 
 // busca palavras/frases no dicionario
-void buscar()
+void Buscar()
 {
-	system("cls");
-	printf("Carregando palavras do dicionario, por favor aguarde.");
-	carregar();
 	system("cls");
 	char word[tamTex + 1];
 	int locate = 0;
-	printf("Digite a palavra ou parte dela para buscar: ");
+	printf("Digite a palavra e aperte enter para buscar: ");
 	fflush(stdin);
 	gets(word);
-	system("cls");
+	//system("cls");
 
-	int tamanho = strlen(word); //Contabilizando o tamanho da palavra que foi digitada para compara��o da string
-
-	for (i = 0; i <= carregados; i++)
+	if (strlen(word) > 0)
 	{
-		if (strncmp(aux[i], word, tamanho) == 0) //fun��o que faz a compara��o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
+		for (i = 0; i <= carregados; i++)
 		{
-			if (i % 2 == 0)
+			if (strcmp(aux[i], word) == 0) //fun��o que faz a compara��o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
 			{
-				printf("Palavra: %s\n", aux[i]);
-				printf("Traducao: %s\n\n", aux[i + 1]);
-			}
-			else
-			{
-				printf("Palavra: %s\n", aux[i]);
-				printf("Traducao: %s\n\n", aux[i - 1]);
-			}
+				locate++; //contabiliza que houve resultado encontrado
 
-			locate++;
+				if (i % 2 == 0) //Verifica se a palavra buscada está em português ou em inglês para retornar sua tradução.
+				{
+					printf("\nPalavra: %s\n", aux[i]);
+					printf("Traducao: %s\n\n", aux[i + 1]);
+					break;
+				}
+				else
+				{
+					printf("\nPalavra: %s\n", aux[i]);
+					printf("Traducao: %s\n\n", aux[i - 1]);
+					break;
+				}
+			}
 		}
 	}
 
 	fflush(stdin);
 
 	if (!locate)
-		printf("Palavra nao encontrada.\n\n\n");
+		printf("\nPalavra nao localizada.\n");
 
 	printf("Pressione enter para continuar.\n");
 	getchar();
 }
-
-void carregar()
+//Fun��o para o carregamento das palavras dentro do vetor
+void Carregar()
 {
 	carregados = 0;
-	char palavra[tamTex + 1]; // considerar o '\0'
 
 	txt = fopen(arquivo, "rb");
 
 	if (txt == NULL)
-		printf("Erro na leitura do Arquivo!!! Entre em contato com o suporte tecnico!\n");
+		printf("Erro na leitura do arquivo!!! Entre em contato com o suporte tecnico!\n");
 	else
 	{
-		while (!feof(txt))
+		while (!feof(txt)) //feof file end of file
 		{
 			fgets(aux[carregados], tamTex + 1, txt);
-			aux[carregados][strcspn(aux[carregados], "\r\n")] = '\0';
+			aux[carregados][strcspn(aux[carregados], "\r\n")] = '\0'; //Conta a quantidade de caracteres apenas da palavra, removendo o parágrafo
 			carregados++;
 		}
-
-		fclose(txt);
 	}
 	fclose(txt);
 }
 
-void inserir(void)
+void Inserir()
 {
 	char palavra[tamTex + 1]; // considerar o '\0'
 
@@ -111,16 +108,51 @@ void inserir(void)
 	getchar(); //pausa para retornar ao menu inicial
 }
 
-void visualizar(void)
+void Ordenar()
 {
-	system("cls");
-	printf("Carregando palavras do dicionario, por favor aguarde.");
-	carregar();
+	char orgPalavra[251], orgTraducao[251];
+
+	for (j = 0; j < carregados; j = j + 2)
+	{
+		for (i = 0; i < carregados - 2; i = i + 2)
+		{
+			if (strcmp(aux[i], aux[i + 2]) > 0)
+			{
+				strcpy(orgPalavra, aux[i]);
+				strcpy(orgTraducao, aux[i + 1]);
+
+				strcpy(aux[i], aux[i + 2]);
+				strcpy(aux[i + 1], aux[i + 3]);
+
+				strcpy(aux[i + 2], orgPalavra);
+				strcpy(aux[i + 3], orgTraducao);
+			}
+		}
+	}
+
+	txt = fopen(arquivo, "wb"); // abre o dicionário em modo de adi��o/acrescentar mais palavras
+
+	for (i = 0; i <= carregados; i++)
+	{
+		//printf("Palavra: %s\n", aux[i]);
+		if (strlen(aux[i]) > 0)
+			fprintf(txt, "%s\n", aux[i]);
+	}
+
+	fclose(txt); // fecha o dicionario
+
+	fflush(stdin);
+	printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
+	getchar();
+}
+
+void Visualizar()
+{
 	system("cls"); //Limpa a tela no windows
 
 	for (i = 0; i <= carregados; i++)
 	{
-		if (strcmp(aux[i], "") != 0) //Compara a string para o caso de ela estar vazia
+		if (strcmp(aux[i], ""))
 		{
 			if (i % 10 == 0 && i != 0) //Pausa a exibi��o a cada 5 palavras e seus significados
 			{
@@ -132,18 +164,12 @@ void visualizar(void)
 			}
 			//Organizando para melhor exibi��o
 			if (i % 2 == 0)
-				printf("\nPalavra: ");
+				printf("Palavra: %s", aux[i]);
 			else
-				printf("Traducao: ");
-
-			printf("%s", aux[i]);
-		}
-		else
-		{
-			printf("\n\n\nFim\n\n\n");
-			break;
+				printf("\nTraducao: %s\n\n", aux[i]);
 		}
 	}
+	printf("\n\n\nFim\n\n\n");
 
 	fflush(stdin); //Esvazia o buffer do teclado
 	printf("Pressione enter para voltar ao menu inicial.\n");
@@ -152,39 +178,19 @@ void visualizar(void)
 
 int main()
 {
-	/*
-	Fun��o para exibir as letras das palavras que est�o salvas no dicion�rio hueeeeeeeeeeeee
-		carregar();
-	
-		int j = 0,  k = 0, m;
-		
-		char teste;
-		
-		
-		for (j = 0; j < carregados; j++)
-		{
-			m = strlen(aux[j]);
-			for (k = 0; k < m; k++)
-			{
-				printf("Palavra: %d - Letra: %d.\n", j, k);
-				printf("%c - %d\n\n", aux[j][k], (int)aux[j][k]);
-				
-				//aux[j][k]
-			}
-		}
-		system("pause");
-	*/
-
-	int opcao = 9;
-
+	opcao = -1;
 	while (opcao)
 	{
+		system("cls");
+		fflush(stdin);
 
+		printf("Carregando palavras do dicionario, por favor aguarde.");
+		Carregar();
 		//system("clear");
 		system("cls");
 		printf("Menu do Dicionario:\n\n");
 		printf("************************\n");
-		printf("Existem atualmente %d palavras com traducao no dicionario.", (carregados / 2));
+		printf("Existem atualmente %d linhas no dicionario.", carregados);
 		printf("\n************************\n");
 		printf("1. Visualizar\n");
 		printf("2. Buscar\n");
@@ -195,46 +201,45 @@ int main()
 		printf("0. Sair do Programa\n");
 		printf("************************\n");
 		printf("Opcao:\n");
-		fflush(stdin);
 		scanf("%d", &opcao);
 		printf("\n");
 
 		switch (opcao)
 		{
-		case 1:
-		{
-			visualizar();
-			break;
-		}
-		case 2:
-		{
-			buscar();
-			break;
-		}
-		case 3:
-		{
-			inserir();
-			break;
-		}
-		case 4:
-		{
-			//apagar();
-			break;
-		}
-		case 5:
-		{
-			//corrigir();
-			break;
-		}
-		case 6:
-		{
-			//ordenar();
-			break;
-		}
-		default:
-		{
-			break;
-		}
+			case 1:
+			{
+				Visualizar();
+				break;
+			}
+			case 2:
+			{
+				Buscar();
+				break;
+			}
+			case 3:
+			{
+				Inserir();
+				break;
+			}
+			case 4:
+			{
+				//Apagar();
+				break;
+			}
+			case 5:
+			{
+				//Corrigir();
+				break;
+			}
+			case 6:
+			{
+				Ordenar();
+				break;
+			}
+			default:
+			{
+				break;
+			}
 		}
 	}
 }
