@@ -1,14 +1,19 @@
-#include<stdio.h>
-#define tamTex 250 
+#include <stdio.h>
+#include <string.h>
+#define tamTex 250
 #define arquivo "falau.txt"
 
 FILE *txt;
 char aux[1000][251];
 int carregados, i;
 
-// insere palavras/frases no dicionario
+// busca palavras/frases no dicionario
 void buscar()
 {
+	system("cls");
+	printf("Carregando palavras do dicionario, por favor aguarde.");
+	carregar();
+	system("cls");
 	char word[tamTex + 1];
 	int locate = 0;
 	printf("Digite a palavra ou parte dela para buscar: ");
@@ -16,24 +21,24 @@ void buscar()
 	gets(word);
 	system("cls");
 
-	int tamanho = strlen(word); //Contabilizando o tamanho da palavra que foi digitada para comparação da string
+	int tamanho = strlen(word); //Contabilizando o tamanho da palavra que foi digitada para comparaï¿½ï¿½o da string
 
 	for (i = 0; i <= carregados; i++)
 	{
-		if (strncmp(aux[i], word, tamanho) == 0) //função que faz a comparação entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
+		if (strncmp(aux[i], word, tamanho) == 0) //funï¿½ï¿½o que faz a comparaï¿½ï¿½o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
 		{
 			if (i % 2 == 0)
 			{
-				printf("Palavra: %s", aux[i]);
+				printf("Palavra: %s\n", aux[i]);
 				printf("Traducao: %s\n\n", aux[i + 1]);
 			}
 			else
 			{
-				printf("Palavra: %s", aux[i]);
+				printf("Palavra: %s\n", aux[i]);
 				printf("Traducao: %s\n\n", aux[i - 1]);
 			}
-			
-			locate ++;
+
+			locate++;
 		}
 	}
 
@@ -60,6 +65,7 @@ void carregar()
 		while (!feof(txt))
 		{
 			fgets(aux[carregados], tamTex + 1, txt);
+			aux[carregados][strcspn(aux[carregados], "\r\n")] = '\0';
 			carregados++;
 		}
 
@@ -72,7 +78,7 @@ void inserir(void)
 {
 	char palavra[tamTex + 1]; // considerar o '\0'
 
-	txt = fopen(arquivo, "rb"); // abre o dicionÃ¡rio 
+	txt = fopen(arquivo, "rb"); // abre o dicionÃ¡rio
 
 	// erro caso nÃ£o encontre o arquivo de bd do dicionÃ¡rio
 	if (txt == NULL)
@@ -81,20 +87,20 @@ void inserir(void)
 	}
 	else
 	{
-		txt = fopen(arquivo, "ab"); // abre o dicionÃ¡rio em modo de adição/acrescentar mais palavras
+		txt = fopen(arquivo, "ab"); // abre o dicionÃ¡rio em modo de adiï¿½ï¿½o/acrescentar mais palavras
 
 		printf("Digite a palavra em ingles:\n");
 		fflush(stdin); // usado no win para limpar o buffer do teclado
 		//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
 		fgets(palavra, tamTex, stdin); //stdin eh o teclado
-		fprintf(txt, "%s", palavra); // salva a palavra o BD e quebra a linha
+		fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 
-		//----------------------------//add tradução
+		//----------------------------//add traduï¿½ï¿½o
 		printf("Digite a traducao:\n");
 		fflush(stdin); // usado no win para limpar o buffer do teclado
 		//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
 		fgets(palavra, tamTex, stdin); //stdin eh o teclado
-		fprintf(txt, "%s", palavra); // salva a palavra o BD e quebra a linha
+		fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 	}
 	fclose(txt); // fecha o dicionario
 
@@ -107,13 +113,16 @@ void inserir(void)
 
 void visualizar(void)
 {
+	system("cls");
+	printf("Carregando palavras do dicionario, por favor aguarde.");
+	carregar();
 	system("cls"); //Limpa a tela no windows
-	
+
 	for (i = 0; i <= carregados; i++)
 	{
-		if (strcmp(aux[i], "") != 0)//Compara a string para o caso de ela estar vazia
+		if (strcmp(aux[i], "") != 0) //Compara a string para o caso de ela estar vazia
 		{
-			if (i % 10 == 0 && i != 0)//Pausa a exibição a cada 5 palavras e seus significados
+			if (i % 10 == 0 && i != 0) //Pausa a exibiï¿½ï¿½o a cada 5 palavras e seus significados
 			{
 				fflush(stdin);
 				printf("\n\n\n");
@@ -121,7 +130,7 @@ void visualizar(void)
 				getchar();
 				system("cls");
 			}
-			//Organizando para melhor exibição
+			//Organizando para melhor exibiï¿½ï¿½o
 			if (i % 2 == 0)
 				printf("\nPalavra: ");
 			else
@@ -139,19 +148,38 @@ void visualizar(void)
 	fflush(stdin); //Esvazia o buffer do teclado
 	printf("Pressione enter para voltar ao menu inicial.\n");
 	getchar(); //pausa para retornar ao menu inicial
-
 }
-
 
 int main()
 {
+	/*
+	Funï¿½ï¿½o para exibir as letras das palavras que estï¿½o salvas no dicionï¿½rio hueeeeeeeeeeeee
+		carregar();
+	
+		int j = 0,  k = 0, m;
+		
+		char teste;
+		
+		
+		for (j = 0; j < carregados; j++)
+		{
+			m = strlen(aux[j]);
+			for (k = 0; k < m; k++)
+			{
+				printf("Palavra: %d - Letra: %d.\n", j, k);
+				printf("%c - %d\n\n", aux[j][k], (int)aux[j][k]);
+				
+				//aux[j][k]
+			}
+		}
+		system("pause");
+	*/
+
 	int opcao = 9;
 
 	while (opcao)
 	{
-		system("cls");
-		printf("Carregando palavras do dicionario, por favor aguarde.");
-		carregar();
+
 		//system("clear");
 		system("cls");
 		printf("Menu do Dicionario:\n\n");
@@ -173,40 +201,40 @@ int main()
 
 		switch (opcao)
 		{
-			case 1:
-			{
-				visualizar();
-				break;
-			}
-			case 2:
-			{
-				buscar();
-				break;
-			}
-			case 3:
-			{
-				inserir();
-				break;
-			}
-			case 4:
-			{
-				//apagar();
-				break;
-			}
-			case 5:
-			{
-				//corrigir();
-				break;
-			}
-			case 6:
-			{
-				//ordenar();
-				break;
-			}
-			default:
-			{
-				break;
-			}
+		case 1:
+		{
+			visualizar();
+			break;
+		}
+		case 2:
+		{
+			buscar();
+			break;
+		}
+		case 3:
+		{
+			inserir();
+			break;
+		}
+		case 4:
+		{
+			//apagar();
+			break;
+		}
+		case 5:
+		{
+			//corrigir();
+			break;
+		}
+		case 6:
+		{
+			//ordenar();
+			break;
+		}
+		default:
+		{
+			break;
+		}
 		}
 	}
 }
