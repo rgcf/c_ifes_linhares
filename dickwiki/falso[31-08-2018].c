@@ -1,23 +1,20 @@
 #include <stdio.h>
-#include <stdio_ext.h>
-#include <stdlib.h>
 #include <string.h>
 #define tamTex 250
-#define arquivo "falau.ifes"
+#define arquivo "falau.txt"
 
 FILE *txt;
-char aux[1000][251], word[tamTex + 1];
+char aux[1000][251];
 int opcao, carregados, i, j;
 
 // busca palavras/frases no dicionario
-int Buscar()
+void Buscar()
 {
 	system("cls");
-	// system("clear");
+	char word[tamTex + 1];
 	int locate = 0;
 	printf("Digite a palavra e aperte enter para buscar: ");
-	fflush(stdin); // usado no win para limpar o buffer do teclado
-	//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
+	fflush(stdin);
 	gets(word);
 	//system("cls");
 
@@ -45,8 +42,7 @@ int Buscar()
 		}
 	}
 
-	fflush(stdin); // usado no win para limpar o buffer do teclado
-	// __fpurge(stdin); // usado no linux para limpar o buffer do teclado
+	fflush(stdin);
 
 	if (!locate)
 		printf("\nPalavra nao localizada.\n");
@@ -54,7 +50,6 @@ int Buscar()
 	printf("Pressione enter para continuar.\n");
 	getchar();
 }
-
 //Fun��o para o carregamento das palavras dentro do vetor
 void Carregar()
 {
@@ -62,7 +57,7 @@ void Carregar()
 
 	txt = fopen(arquivo, "rb");
 
-	if (!txt)
+	if (txt == NULL)
 		printf("Erro na leitura do arquivo!!! Entre em contato com o suporte tecnico!\n");
 	else
 	{
@@ -75,11 +70,9 @@ void Carregar()
 	}
 	fclose(txt);
 }
-//Função para inclusão de novas palavras
+
 void Inserir()
 {
-	system("cls");
-	
 	char palavra[tamTex + 1]; // considerar o '\0'
 
 	txt = fopen(arquivo, "rb"); // abre o dicionário
@@ -95,21 +88,21 @@ void Inserir()
 
 		printf("Digite a palavra em ingles:\n");
 		fflush(stdin); // usado no win para limpar o buffer do teclado
-		// __fpurge(stdin);			   // usado no linux para limpar o buffer do teclado
+		//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
 		fgets(palavra, tamTex, stdin); //stdin eh o teclado
 		fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 
 		//----------------------------//add tradu��o
 		printf("Digite a traducao:\n");
 		fflush(stdin); // usado no win para limpar o buffer do teclado
-		// __fpurge(stdin);			   // usado no linux para limpar o buffer do teclado
+		//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
 		fgets(palavra, tamTex, stdin); //stdin eh o teclado
 		fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 	}
 	fclose(txt); // fecha o dicionario
 
-	fflush(stdin); // usado no win para limpar o buffer do teclado
-	// __fpurge(stdin); // usado no linux para limpar o buffer do teclado
+	fflush(stdin); //Esvazia o buffer do teclado
+
 	printf("Pressione enter para voltar ao menu inicial.\n");
 
 	getchar(); //pausa para retornar ao menu inicial
@@ -121,14 +114,15 @@ void Ordenar()
 
 	for (j = 0; j < carregados; j = j + 2)
 	{
-		for (i = 0; i <= carregados - 2; i = i + 2)
+		for (i = 0; i < carregados - 2; i = i + 2)
 		{
-			if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o apenas teste extra
+			if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o
 			{
 				strcpy(aux[i], "");
 				strcpy(aux[i + 1], "");
 			}
-			else if (strcmp(aux[i], aux[i + 2]) > 0)
+			else
+			if (strcmp(aux[i], aux[i + 2]) > 0)
 			{
 				strcpy(orgPalavra, aux[i]);
 				strcpy(orgTraducao, aux[i + 1]);
@@ -146,66 +140,20 @@ void Ordenar()
 
 	for (i = 0; i <= carregados; i++)
 	{
-		if (strlen(aux[i]) > 0)			  //remove os valores vazios q continuarem salvos dentro do vetor
-			fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
+		if (strlen(aux[i]) > 0)//remove os valores vazios q continuarem salvos dentro do vetor
+			fprintf(txt, "%s\n", aux[i]);//grava os valores dentro do arquivo txt
 	}
 
 	fclose(txt); // fecha o dicionario
 
-	fflush(stdin); // usado no win para limpar o buffer do teclado
-	// __fpurge(stdin); // usado no linux para limpar o buffer do teclado
+	fflush(stdin);
 	printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
 	getchar();
 }
 
-void RetirarPalavra()
-{
-	printf("Digite a palavra que deseja retirar: ");
-	fflush(stdin); // usado no win para limpar o buffer do teclado
-	//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
-	gets(word);
-	//system("cls");
-
-	if (strlen(word) > 0)
-	{
-		for (i = 0; i <= carregados; i++)
-		{
-			if (strcmp(aux[i], word) == 0) //fun��o que faz a compara��o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
-			{	
-				if (i % 2 == 0) //Verifica se a palavra buscada está em português ou em inglês para retornar sua tradução.
-				{
-					printf("\nPalavra: %s\n", aux[i]);
-					printf("Traducao: %s\n\n", aux[i + 1]);
-					strcpy(aux[i], "");
-					strcpy(aux[i + 1], "");
-					break;
-				}
-				else
-				{
-					printf("\nPalavra: %s\n", aux[i]);
-					printf("Traducao: %s\n\n", aux[i - 1]);
-					strcpy(aux[i], "");
-					strcpy(aux[i - 1], "");
-					break;
-				}
-			}
-		}
-		
-	txt = fopen(arquivo, "wb"); // abre o dicionário em modo de adicao para acrescentar mais palavras
-
-	for (i = 0; i <= carregados; i++)
-	{
-		if (strlen(aux[i]) > 0)			  //remove os valores vazios q continuarem salvos dentro do vetor
-			fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
-	}
-
-	fclose(txt); // fecha o dicionario
-	}
-}
-
 void Visualizar()
 {
-	system("cls"); //Limpa a tela no Linux
+	system("cls"); //Limpa a tela no windows
 
 	for (i = 0; i <= carregados; i++)
 	{
@@ -240,7 +188,7 @@ int main()
 	{
 		system("cls");
 		fflush(stdin);
-		txt = fopen(arquivo, "rb");
+
 		printf("Carregando palavras do dicionario, por favor aguarde.");
 		Carregar();
 		//system("clear");
@@ -263,40 +211,40 @@ int main()
 
 		switch (opcao)
 		{
-		case 1:
-		{
-			Visualizar();
-			break;
-		}
-		case 2:
-		{
-			Buscar();
-			break;
-		}
-		case 3:
-		{
-			Inserir();
-			break;
-		}
-		case 4:
-		{
-			RetirarPalavra();
-			break;
-		}
-		case 5:
-		{
-			//Corrigir();
-			break;
-		}
-		case 6:
-		{
-			Ordenar();
-			break;
-		}
-		default:
-		{
-			break;
-		}
+			case 1:
+			{
+				Visualizar();
+				break;
+			}
+			case 2:
+			{
+				Buscar();
+				break;
+			}
+			case 3:
+			{
+				Inserir();
+				break;
+			}
+			case 4:
+			{
+				//Apagar();
+				break;
+			}
+			case 5:
+			{
+				//Corrigir();
+				break;
+			}
+			case 6:
+			{
+				Ordenar();
+				break;
+			}
+			default:
+			{
+				break;
+			}
 		}
 	}
 }
