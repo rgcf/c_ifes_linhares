@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdio_ext.h>
+//#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #define tamTex 250
@@ -114,21 +114,22 @@ void Inserir()
 
 	getchar(); //pausa para retornar ao menu inicial
 }
-
+//Função que ordena as palavras e remove os espaços vazios ao salvar no arquivo
 void Ordenar()
 {
 	char orgPalavra[251], orgTraducao[251];
 
 	for (j = 0; j < carregados; j = j + 2)
 	{
-		for (i = 0; i <= carregados - 2; i = i + 2)
+		for (i = 0; i <= carregados - 4; i = i + 2)
 		{
-			if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o apenas teste extra
-			{
-				strcpy(aux[i], "");
-				strcpy(aux[i + 1], "");
-			}
-			else if (strcmp(aux[i], aux[i + 2]) > 0)
+			// if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o apenas teste extra
+			// {
+			// 	strcpy(aux[i], "");
+			// 	strcpy(aux[i + 1], "");
+			// }
+			// else 
+			if (strcmp(aux[i], aux[i + 2]) > 0)
 			{
 				strcpy(orgPalavra, aux[i]);
 				strcpy(orgTraducao, aux[i + 1]);
@@ -243,11 +244,10 @@ int main()
 		txt = fopen(arquivo, "rb");
 		printf("Carregando palavras do dicionario, por favor aguarde.");
 		Carregar();
-		//system("clear");
 		system("cls");
 		printf("Menu do Dicionario:\n\n");
 		printf("************************\n");
-		printf("Existem atualmente %d linhas no dicionario.", carregados);
+		printf("Existem atualmente %d palavras no dicionario.", carregados/2);
 		printf("\n************************\n");
 		printf("1. Visualizar\n");
 		printf("2. Buscar\n");
