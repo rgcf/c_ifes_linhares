@@ -10,7 +10,7 @@ char aux[1000][251], word[tamTex + 1];
 int opcao, carregados, i, j;
 
 // busca palavras/frases no dicionario
-int Buscar()
+void Buscar()
 {
 	system("cls");
 	// system("clear");
@@ -75,6 +75,16 @@ void Carregar()
 	}
 	fclose(txt);
 }
+
+int Confirma()
+{
+	int conf = 1;
+	printf("\nDigite \"0\" para sim ou \"1\" para nao:\n");
+	scanf("%d", &conf);
+	return conf;
+
+}
+
 //Função para inclusão de novas palavras
 void Inserir()
 {
@@ -123,13 +133,12 @@ void Ordenar()
 	{
 		for (i = 0; i <= carregados - 4; i = i + 2)
 		{
-			// if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o apenas teste extra
-			// {
-			// 	strcpy(aux[i], "");
-			// 	strcpy(aux[i + 1], "");
-			// }
-			// else 
-			if (strcmp(aux[i], aux[i + 2]) > 0)
+			if (strcmp(aux[i], aux[i + 2]) == 0) //removendo os valores repetidos, estando em branco ou n�o apenas teste extra
+			{
+				strcpy(aux[i], "");
+				strcpy(aux[i + 1], "");
+			}
+			else if (strcmp(aux[i], aux[i + 2]) > 0)
 			{
 				strcpy(orgPalavra, aux[i]);
 				strcpy(orgTraducao, aux[i + 1]);
@@ -144,7 +153,7 @@ void Ordenar()
 	}
 
 	txt = fopen(arquivo, "wb"); // abre o dicionário em modo de adicao para acrescentar mais palavras
-
+	
 	for (i = 0; i <= carregados; i++)
 	{
 		if (strlen(aux[i]) > 0)			  //remove os valores vazios q continuarem salvos dentro do vetor
@@ -175,16 +184,18 @@ void RetirarPalavra()
 			{	
 				if (i % 2 == 0) //Verifica se a palavra buscada está em português ou em inglês para retornar sua tradução.
 				{
-					printf("\nPalavra: %s\n", aux[i]);
-					printf("Traducao: %s\n\n", aux[i + 1]);
+					printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", aux[i]);
+					if(Confirma())
+						break;
 					strcpy(aux[i], "");
 					strcpy(aux[i + 1], "");
 					break;
 				}
 				else
 				{
-					printf("\nPalavra: %s\n", aux[i]);
-					printf("Traducao: %s\n\n", aux[i - 1]);
+					printf("Confirma a exclusão da palavra \"%s\" e sua traducao?");
+					if(Confirma())
+						break;
 					strcpy(aux[i], "");
 					strcpy(aux[i - 1], "");
 					break;
@@ -263,40 +274,40 @@ int main()
 
 		switch (opcao)
 		{
-		case 1:
-		{
-			Visualizar();
-			break;
-		}
-		case 2:
-		{
-			Buscar();
-			break;
-		}
-		case 3:
-		{
-			Inserir();
-			break;
-		}
-		case 4:
-		{
-			RetirarPalavra();
-			break;
-		}
-		case 5:
-		{
-			//Corrigir();
-			break;
-		}
-		case 6:
-		{
-			Ordenar();
-			break;
-		}
-		default:
-		{
-			break;
-		}
+			case 1:
+			{
+				Visualizar();
+				break;
+			}
+			case 2:
+			{
+				Buscar();
+				break;
+			}
+			case 3:
+			{
+				Inserir();
+				break;
+			}
+			case 4:
+			{
+				RetirarPalavra();
+				break;
+			}
+			case 5:
+			{
+				//Corrigir();
+				break;
+			}
+			case 6:
+			{
+				Ordenar();
+				break;
+			}
+			default:
+			{
+				break;
+			}
 		}
 	}
 }
