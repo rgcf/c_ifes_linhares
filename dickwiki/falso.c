@@ -1,8 +1,8 @@
 #include <stdio.h>
-//#include <stdio_ext.h>
+#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
-#define tamTex 250
+#define tamTex 250+1
 #define arquivo "falau.ifes"
 
 FILE *txt;
@@ -18,7 +18,7 @@ void Buscar()
 	printf("Digite a palavra e aperte enter para buscar: ");
 	fflush(stdin); // usado no win para limpar o buffer do teclado
 	//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
-	gets(word);
+	fgets(word, tamTex, stdin);
 	//system("cls");
 
 	if (strlen(word) > 0)
@@ -68,7 +68,7 @@ void Carregar()
 	{
 		while (!feof(txt)) //feof file end of file
 		{
-			fgets(aux[carregados], tamTex + 1, txt);
+			fgets(aux[carregados], tamTex, txt);
 			aux[carregados][strcspn(aux[carregados], "\r\n")] = '\0'; //Conta a quantidade de caracteres apenas da palavra, removendo o parágrafo
 			carregados++;
 		}
@@ -173,7 +173,7 @@ void RetirarPalavra()
 	printf("Digite a palavra que deseja retirar: ");
 	fflush(stdin); // usado no win para limpar o buffer do teclado
 	//__fpurge(stdin); // usado no linux para limpar o buffer do teclado
-	gets(word);
+	fgets(word,tamTex,stdin);
 	//system("cls");
 
 	if (strlen(word) > 0)
@@ -306,6 +306,8 @@ int main()
 			}
 			default:
 			{
+				printf("Opcao invalida, por favor, pressione enter para tentar novamente.");
+				getchar();
 				break;
 			}
 		}
