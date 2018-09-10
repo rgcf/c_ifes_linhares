@@ -3,7 +3,7 @@
 int main()
 {
 	int opcao = -1;
-	while (opcao)
+	do
 	{
 		opcao = -1;
 		system("cls");
@@ -67,5 +67,6 @@ int main()
 				break;
 			}
 		}
-	}
+	}while (opcao);
+	exit(0);
 }
