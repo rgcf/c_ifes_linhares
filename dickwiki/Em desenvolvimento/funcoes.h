@@ -6,8 +6,9 @@ Esta é a biblioteca de funções do dicionario feito em 'C'.
 //#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
+#include "funcoesDicionario.c"
 #define tamTex 251
-#define arquivo "falau.txt"
+#define arquivo "db.txt"
 
 FILE *txt;
 char aux[1000][tamTex], word[tamTex];

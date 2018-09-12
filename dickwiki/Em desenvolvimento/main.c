@@ -8,7 +8,6 @@ int main()
 		opcao = -1;
 		system("cls");
 		fflush(stdin);
-		txt = fopen(arquivo, "rb");
 		printf("Carregando palavras do dicionario, por favor aguarde.");
 		Carregar();
 		system("cls");
