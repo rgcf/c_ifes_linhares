@@ -1,4 +1,4 @@
-#include "funcoes.h"
+ #include "funcoes.h"
 
 int main()
 {
@@ -14,7 +14,7 @@ int main()
 		system("cls");
 		printf("Menu do Dicionario:\n\n");
 		printf("************************\n");
-		printf("Existem atualmente %d palavras no dicionario.", carregados/2);
+		printf("Existem atualmente %d palavras com traducao no dicionario.", carregados/2); //Contabiliza o totald e palavras com tradução, ou seja, metade do total de linhas existentes
 		printf("\n************************\n");
 		printf("1. Visualizar\n");
 		printf("2. Buscar\n");

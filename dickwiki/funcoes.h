@@ -6,13 +6,14 @@ Esta é a biblioteca de funções do dicionario feito em 'C'.
 //#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
-#define tamTex 250+1
-#define arquivo "falau.ifes"
+#define tamTex 251
+#define arquivo "falau.txt"
 
 FILE *txt;
-char aux[1000][251], word[tamTex];
+char aux[1000][tamTex], word[tamTex];
 int carregados, i, j;
 // busca palavras/frases no dicionario
+
 void Buscar()
 {
 	system("cls");
@@ -58,6 +59,21 @@ void Buscar()
 	getchar();
 }
 
+int CriarArquivo()
+{
+	txt = fopen(arquivo, "wb");
+	if (!txt)
+	{
+		printf("Erro ao criar o arquivo, entre em contato com o suporte tecnico.");
+		exit(1);
+	}
+	else
+	{
+		printf("Arquivo criado com sucesso");
+		return 1;
+	}
+}
+
 //Fun��o para o carregamento das palavras dentro do vetor
 void Carregar()
 {
@@ -66,7 +82,40 @@ void Carregar()
 	txt = fopen(arquivo, "rb");
 
 	if (!txt)
-		printf("Erro na leitura do arquivo!!! Entre em contato com o suporte tecnico!\n");
+	{
+		system("cls");
+		printf("Erro ao abrir a base de dados, deseja criar um novo arquivo de dados?\n");
+
+		char criarTxt = ' ';
+		int arquivoCriado = 0;
+
+		do
+		{
+			printf("Digite:\n \"S\" - para criar um novo arquivo;\n \"N\" - para encerrar o programa\n\n");
+			fflush(stdin);
+			scanf("%c", &criarTxt);
+			switch (criarTxt)
+			{
+				case 's':
+				{
+					arquivoCriado = CriarArquivo();
+					break;
+				}
+				case 'S':
+				{
+					arquivoCriado = CriarArquivo();
+					break;
+				}
+				case 'n':
+					exit(1);
+				case 'N':
+					exit(1);
+				default:
+				system("cls");
+				printf("Valor invalido invalido, por favor, tente novamente.\n\n");
+			}
+		}while (!arquivoCriado);
+	}
 	else
 	{
 		while (!feof(txt)) //feof file end of file
@@ -85,8 +134,13 @@ int Confirma()
 	printf("\nDigite \"0\" para sim ou \"1\" para nao:\n");
 	scanf("%d", &conf);
 	return conf;
-
 }
+
+void Corrigir()
+{
+	
+}
+
 
 //Função para inclusão de novas palavras
 void Inserir()
@@ -185,18 +239,20 @@ void RetirarPalavra()
 		{
 			if (strcmp(aux[i], word) == 0) //fun��o que faz a compara��o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
 			{	
+				char exibePalavra[tamTex];
 				if (i % 2 == 0) //Verifica se a palavra buscada está em português ou em inglês para retornar sua tradução.
 				{
-					printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", strupr(aux[i]));
+					printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", aux[i]);
 					if(Confirma())
 						break;
 					strcpy(aux[i], "");
 					strcpy(aux[i + 1], "");
+
 					break;
 				}
 				else
 				{
-					printf("Confirma a exclusão da palavra \"%s\" e sua traducao?", strupr(aux[i]));
+					printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", aux[i]);
 					if(Confirma())
 						break;
 					strcpy(aux[i], "");
@@ -221,27 +277,31 @@ void RetirarPalavra()
 void Visualizar()
 {
 	system("cls"); //Limpa a tela no Linux
-
-	for (i = 0; i <= carregados; i++)
-	{
-		if (strcmp(aux[i], ""))
+	if (carregados > 1)
 		{
-			if (i % 10 == 0 && i != 0) //Pausa a exibi��o a cada 5 palavras e seus significados
+			for (i = 0; i <= carregados; i++)
 			{
-				fflush(stdin);
-				printf("\n\n\n");
-				printf("Pressione enter para continuar.\n");
-				getchar();
-				system("cls");
+				if (strcmp(aux[i], ""))
+				{
+					if (i % 10 == 0 && i != 0) //Pausa a exibi��o a cada 5 palavras e seus significados
+					{
+						fflush(stdin);
+						printf("\n\n\n");
+						printf("Pressione enter para continuar.\n");
+						getchar();
+						system("cls");
+					}
+					//Organizando para melhor exibi��o
+					if (i % 2 == 0)
+						printf("Palavra: %s", aux[i]);
+					else
+						printf("\nTraducao: %s\n\n", aux[i]);
+				}
 			}
-			//Organizando para melhor exibi��o
-			if (i % 2 == 0)
-				printf("Palavra: %s", aux[i]);
-			else
-				printf("\nTraducao: %s\n\n", aux[i]);
+			printf("\n\n\nFim\n\n\n");
 		}
-	}
-	printf("\n\n\nFim\n\n\n");
+	else
+		printf("Dicionario vazio, insira novas palavras.\n\n");
 
 	fflush(stdin); //Esvazia o buffer do teclado
 	printf("Pressione enter para voltar ao menu inicial.\n");
