@@ -32,60 +32,51 @@ int main()
 
 		switch (opcao)
 		{
-		case 0:
-			break;
-		case 1:
-		{
-			system("cls");
-			Visualizar();
-			break;
-		}
-		case 2:
-		{
-			system("cls");
-
-			Buscar();
-			break;
-		}
-		case 3:
-		{
-			system("cls");
-			Inserir();
-			fflush(stdin);
-			break;
-		}
-		case 4:
-		{
-			system("cls");
-			RetirarPalavra();
-			break;
-		}
-		case 5:
-		{
-			system("cls");
-			//Corrigir();
-			break;
-		}
-		case 6:
-		{
-			system("cls");
-			Ordenar();
-			break;
-		}
-		case 7:
-		{
-			system("cls");
-			Estudar();
-			break;
-		}
-		default:
-		{
-			system("cls");
-			printf("Opcao invalida, por favor, pressione enter para tentar novamente.");
-			getchar();
-			fflush(stdin);
-			break;
-		}
+			case 0:
+				break;
+			case 1:
+			{
+				Visualizar();
+				break;
+			}
+			case 2:
+			{
+				Buscar();
+				break;
+			}
+			case 3:
+			{
+				Inserir();
+				fflush(stdin);
+				break;
+			}
+			case 4:
+			{
+				RetirarPalavra();
+				break;
+			}
+			case 5:
+			{
+				//Corrigir();
+				break;
+			}
+			case 6:
+			{
+				Ordenar();
+				break;
+			}
+			case 7:
+			{
+				Estudar();
+				break;
+			}
+			default:
+			{
+				printf("Opcao invalida, por favor, pressione enter para tentar novamente.");
+				getchar();
+				fflush(stdin);
+				break;
+			}
 		}
 	}while (opcao);
 	exit(0);

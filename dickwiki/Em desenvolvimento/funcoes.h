@@ -13,6 +13,33 @@ FILE *txt;
 char aux[1000][tamTex], word[tamTex];
 int carregados, i, j;
 
+//Função para confirmar, retornando 1 para sim e 0 para não
+int Confirma()
+{
+    char conf = ' ';
+    do
+    {
+        printf("Digite \"S\" para sim ou \"N\" para nao:\n");
+        scanf("%c", &conf);
+        fflush(stdin);
+        switch (conf)
+        {
+            case 's':
+                return 1;
+            case 'S':
+                return 1;
+            case 'n':
+                return 0;
+            case 'N':
+                return 0;
+            default:
+            {
+                printf("\nValor invalido, por favor, tente novamente.\n");
+            }
+        }
+    }while(1);
+}
+
 // busca palavras/frases no dicionario
 void Buscar()
 {
@@ -54,21 +81,6 @@ void Buscar()
     getchar();
 }
 
-void CriarArquivo()
-{
-    txt = fopen(arquivo, "wb");
-    if (!txt)
-    {
-        printf("Erro ao criar o arquivo, entre em contato com o suporte tecnico.");
-        exit(1);
-    }
-    else
-    {
-        printf("Arquivo criado com sucesso");
-        Carregar();
-    }
-}
-
 //Fun��o para o carregamento das palavras dentro do vetor
 void Carregar()
 {
@@ -87,19 +99,21 @@ void Carregar()
     if (!txt)  
     {
         system("cls");
-        printf("Erro ao abrir a base de dados, deseja criar um novo arquivo de dados?\n");
-
-        char criarTxt = ' ';
-        int arquivoCriado = 0;
+        printf("Erro ao abrir o arquivo de dados.\n");
 
         //Verificando a opção do usuário e testando para verificar se é valida ou não
-        printf("Deseja criar um novo arquivo?\n\n");
+        printf("Deseja criar um novo arquivo?\n");
 
-        arquivoCriado = Confirma(); //Confirmação
-
-        if (arquivoCriado)
+        if (Confirma())
         {
-            CriarArquivo();
+            txt = fopen(arquivo, "wb");
+            if (!txt)
+            {
+                printf("Erro ao criar o arquivo, entre em contato com o suporte tecnico.");
+                exit(1);
+            }
+            else
+                printf("Arquivo criado com sucesso");
         }
         else
         {
@@ -120,36 +134,10 @@ void Carregar()
     fclose(txt);
 }
 
-//Função para confirmar, retornando 1 para sim e 0 para não
-int Confirma()
-{
-    char conf = "";
-    do
-    {
-        printf("\nDigite \"S\" para sim ou \"N\" para nao:\n");
-        scanf("%c", &conf);
-        switch (conf)
-        {
-            case 's':
-                return "1";
-            case 'S':
-                return "1";
-            case 'n':
-                return "0";
-            case 'N':
-                return "0";
-            default:
-            {
-                system("cls");
-                printf("Valor invalido invalido, por favor, tente novamente.\n\n");
-            }
-        }
-    }while(0);
-}
-
 void Estudar()
 {
-    int i = 0, ap = 0, sair = 0, cont = 0, pqp = 0; //variaveis auxiliares
+    int ap = 0, sair = 0, cont = 0, pqp = 0; //variaveis auxiliares
+    i = 0;
 
     printf("%d", carregados);
     while (sair != 2)
@@ -238,6 +226,7 @@ void Inserir()
 
     getchar(); //pausa para retornar ao menu inicial
 }
+
 //Fun��o que ordena as palavras e remove os espa�os vazios ao salvar no arquivo
 void Ordenar()
 {
