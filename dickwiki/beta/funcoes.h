@@ -6,21 +6,25 @@ Esta � a biblioteca de fun��es do dicionario feito em 'C'.
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define tamTex 251
+#define tamTex 250 + 1
 #define arquivo "db.txt"
 
 FILE *txt;
-char aux[1000][tamTex], word[tamTex];
+char aux[1000][251], word[tamTex];
 int carregados, i, j;
 
 // busca palavras/frases no dicionario
 void Buscar()
 {
-
+    system("cls");
+    // system("clear");
     int locate = 0;
     printf("Digite a palavra e aperte enter para buscar: ");
     fflush(stdin); // usado no win para limpar o buffer do teclado
+    //__fpurge(stdin); // usado no linux para limpar o buffer do teclado
     gets(word);
+    //system("cls");
+    //word[strcspn(aux[carregados], "\r\n")] = '\0';
     if (strlen(word) > 0)
     {
         for (i = 0; i <= carregados; i++)
@@ -46,6 +50,7 @@ void Buscar()
     }
 
     fflush(stdin); // usado no win para limpar o buffer do teclado
+    // __fpurge(stdin); // usado no linux para limpar o buffer do teclado
 
     if (!locate)
         printf("\nPalavra nao localizada.\n");
@@ -54,7 +59,7 @@ void Buscar()
     getchar();
 }
 
-void CriarArquivo()
+int CriarArquivo()
 {
     txt = fopen(arquivo, "wb");
     if (!txt)
@@ -65,26 +70,18 @@ void CriarArquivo()
     else
     {
         printf("Arquivo criado com sucesso");
-        Carregar();
+        return 1;
     }
 }
 
 //Fun��o para o carregamento das palavras dentro do vetor
 void Carregar()
 {
-    //Função para zerar o vetor caso tenha sido carregado antes, evitando qualquer tipo de erro com as palavras
-    if (carregados != 0)
-        for (i = 0; i < 1000; i++)
-            strcpy(aux[i], "");
-    //Final da função que zera o vetor
+    carregados = 0;
 
-    carregados = 0; //Zerando o contador de palavras carregadas
+    txt = fopen(arquivo, "rb");
 
-    txt = fopen(arquivo, "rb"); // Abrindo o arquivo de dados
-
-    //Verificando se o arquivo de dados existe ou não
-    //Caso não exista, é permitido que o usuário crie um novo ou encerre o programa
-    if (!txt)  
+    if (!txt)
     {
         system("cls");
         printf("Erro ao abrir a base de dados, deseja criar um novo arquivo de dados?\n");
@@ -92,25 +89,36 @@ void Carregar()
         char criarTxt = ' ';
         int arquivoCriado = 0;
 
-        //Verificando a opção do usuário e testando para verificar se é valida ou não
-        printf("Deseja criar um novo arquivo?\n\n");
-
-        arquivoCriado = Confirma(); //Confirmação
-
-        if (arquivoCriado)
+        do
         {
-            CriarArquivo();
-        }
-        else
-        {
-            system("cls");
-            printf("\nO programa sera encerrado, por favor configure uma base de dados ou crie uma nova.");
-            exit(0);
-        }
+            printf("Digite:\n \"S\" - para criar um novo arquivo;\n \"N\" - para encerrar o programa\n\n");
+            fflush(stdin);
+            scanf("%c", &criarTxt);
+            switch (criarTxt)
+            {
+            case 's':
+            {
+                arquivoCriado = CriarArquivo();
+                break;
+            }
+            case 'S':
+            {
+                arquivoCriado = CriarArquivo();
+                break;
+            }
+            case 'n':
+                exit(1);
+            case 'N':
+                exit(1);
+            default:
+                system("cls");
+                printf("Valor invalido invalido, por favor, tente novamente.\n\n");
+            }
+        } while (!arquivoCriado);
     }
     else
     {
-        while (!feof(txt)) //feof lendo todas as linhas do arquivo, até a ultima (end of file)
+        while (!feof(txt)) //feof file end of file
         {
             fgets(aux[carregados], tamTex, txt);
             aux[carregados][strcspn(aux[carregados], "\r\n")] = '\0'; //Conta a quantidade de caracteres apenas da palavra, removendo o parágrafo, no windows o parágrafo é '\r\n', no linux apenas \n, quando salva.
@@ -120,31 +128,12 @@ void Carregar()
     fclose(txt);
 }
 
-//Função para confirmar, retornando 1 para sim e 0 para não
 int Confirma()
 {
-    char conf = "";
-    do
-    {
-        printf("\nDigite \"S\" para sim ou \"N\" para nao:\n");
-        scanf("%c", &conf);
-        switch (conf)
-        {
-            case 's':
-                return "1";
-            case 'S':
-                return "1";
-            case 'n':
-                return "0";
-            case 'N':
-                return "0";
-            default:
-            {
-                system("cls");
-                printf("Valor invalido invalido, por favor, tente novamente.\n\n");
-            }
-        }
-    }while(0);
+    int conf = 1;
+    printf("\nDigite \"0\" para sim ou \"1\" para nao:\n");
+    scanf("%d", &conf);
+    return conf;
 }
 
 void Estudar()
@@ -196,7 +185,7 @@ void Estudar()
         }
         else
         {
-            printf("\n \t !!!!!! Parabens, voce completou o Dicionario !!!!!!\n\n \t        ** Aperte enter para voltar ao menu **  ");
+            printf("\n \t !!!!!! Parabens, voce completou o Dicionario !!!!!!\n\n \t        ** Aperte enter para voltar ao menU **  ");
             fflush(stdin);
             getchar();
             break;
@@ -207,6 +196,8 @@ void Estudar()
 //Fun��o para inclus�o de novas palavras
 void Inserir()
 {
+    system("cls");
+
     char palavra[tamTex]; // considerar o '\0'
 
     txt = fopen(arquivo, "rb"); // abre o dicion�rio
@@ -222,18 +213,21 @@ void Inserir()
 
         printf("Digite a palavra em ingles:\n");
         fflush(stdin); // usado no win para limpar o buffer do teclado
+        // __fpurge(stdin);			   // usado no linux para limpar o buffer do teclado
         fgets(palavra, tamTex, stdin); //stdin eh o teclado
         fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 
         //----------------------------//add tradu??o
         printf("Digite a traducao:\n");
         fflush(stdin); // usado no win para limpar o buffer do teclado
+        // __fpurge(stdin);			   // usado no linux para limpar o buffer do teclado
         fgets(palavra, tamTex, stdin); //stdin eh o teclado
         fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
     }
     fclose(txt); // fecha o dicionario
 
     fflush(stdin); // usado no win para limpar o buffer do teclado
+    // __fpurge(stdin); // usado no linux para limpar o buffer do teclado
     printf("Pressione enter para voltar ao menu inicial.\n");
 
     getchar(); //pausa para retornar ao menu inicial
@@ -252,6 +246,7 @@ void Ordenar()
         }
         for (i = 0; i <= carregados - 4; i = i + 2)
         {
+
             if (strcmp(aux[i], aux[i + 2]) > 0)
             {
                 strcpy(orgPalavra, aux[i]);
@@ -277,6 +272,7 @@ void Ordenar()
     fclose(txt); // fecha o dicionario
 
     fflush(stdin); // usado no win para limpar o buffer do teclado
+    // __fpurge(stdin); // usado no linux para limpar o buffer do teclado
     printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
     getchar();
 }
@@ -285,10 +281,11 @@ void RetirarPalavra()
 {
     printf("Digite a palavra que deseja retirar: ");
     fflush(stdin); // usado no win para limpar o buffer do teclado
+    //__fpurge(stdin); // usado no linux para limpar o buffer do teclado
     gets(word);
     //system("cls");
 
-    if (strlen(word) > 0) //conta o tamanho da palavra e verifica se ela é maior que 0
+    if (strlen(word) > 0)
     {
         for (i = 0; i <= carregados; i++)
         {
@@ -325,14 +322,11 @@ void RetirarPalavra()
 
         fclose(txt); // fecha o dicionario
     }
-    else
-    {
-    printf("\nNenhuma palavra digitada, tente novamente. \n");
-    }
 }
 
 void Visualizar()
 {
+    system("cls"); //Limpa a tela no Linux
     if (carregados > 1)
     {
         for (i = 0; i <= carregados; i++)
