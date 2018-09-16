@@ -2,7 +2,9 @@ air
 ar
 car
 carro
+coffee
+cafe
 dog
 cachorro
-wata
+water
 agua

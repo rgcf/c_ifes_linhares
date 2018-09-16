@@ -1,6 +1,10 @@
 /**********************************************************************************************************
 Esta é a biblioteca de funções do dicionario feito em 'C'.
 ************************************************************************************************************/
+#ifdef _funcoesDicionario_
+#else
+#define _funcoesDicionario_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -200,7 +204,7 @@ void Corrigir()
                     printf("Traducao: %s\n\n", aux[i + 1]);
                     fflush(stdin);
                     printf("O que deseja corrigir?\n");
-                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado:\n");
+                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado\n");
                     scanf("%d", &escolhaCorrecao);
                     fflush(stdin);
                     if (escolhaCorrecao == 1)
@@ -459,3 +463,4 @@ void Visualizar()
 
     FimFuncao();
 }
+#endif

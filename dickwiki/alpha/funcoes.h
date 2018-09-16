@@ -1,6 +1,10 @@
 /**********************************************************************************************************
 Esta é a biblioteca de funções do dicionario feito em 'C'.
 ************************************************************************************************************/
+#ifdef _funcoesDicionario_
+#else
+#define _funcoesDicionario_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -459,3 +463,4 @@ void Visualizar()
 
     FimFuncao();
 }
+#endif
