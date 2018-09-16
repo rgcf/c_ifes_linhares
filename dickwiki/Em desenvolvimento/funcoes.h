@@ -47,6 +47,48 @@ int Confirma()
     } while (1);
 }
 
+//Fun��o que ordena as palavras e remove os espa�os vazios ao salvar no arquivo
+void Ordenar()
+{
+    char orgPalavra[tamTex], orgTraducao[tamTex];
+
+    for (j = 0; j < carregados - 2; j = j + 2)
+    {
+        if (strcmp(aux[j], aux[j + 2]) == 0) //removendo os valores repetidos, estando em branco ou não
+        {
+            strcpy(aux[j + 2], "");
+            strcpy(aux[j + 3], "");
+        }
+        for (i = 0; i <= carregados - 4; i = i + 2)
+        {
+            if (strcmp(aux[j], aux[j + 2]) > 0)
+            {
+                strcpy(orgPalavra, aux[j]);
+                strcpy(orgTraducao, aux[j + 1]);
+
+                strcpy(aux[j], aux[j + 2]);
+                strcpy(aux[j + 1], aux[j + 3]);
+
+                strcpy(aux[j + 2], orgPalavra);
+                strcpy(aux[j + 3], orgTraducao);
+            }
+        }
+    }
+
+    txt = fopen(arquivo, "wb"); // abre o dicion�rio em modo de adicao para acrescentar mais palavras
+
+    for (i = 0; i <= carregados; i++)
+    {
+        if (strlen(aux[i]) > 0)           //ignora os valores vazios q continuarem salvos dentro do vetor
+            fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
+    }
+
+    fclose(txt); // fecha o dicionario
+
+    fflush(stdin); // usado no win para limpar o buffer do teclado
+    printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
+    getchar();
+}
 // busca palavras/frases no dicionario
 void Buscar()
 {
@@ -140,6 +182,53 @@ void Carregar()
     fclose(txt);
 }
 
+void Corrigir()
+{
+    char corrigeDicionario[tamTex]; 
+    int escolhaCorrecao;
+    j = 0;
+    printf("O que deseja corrigir?\n");
+    printf("Digite:\n 1 para corrigir a palavra\n2 para corrigir o significado:\n");
+    scanf("%d", &escolhaCorrecao);
+    
+    printf("\n\nDigite a palavra que deseja corrigir e pressione enter:\n");
+    fflush(stdin); // usado no win para limpar o buffer do teclado
+    gets(word);
+
+    if (strlen(word) > 0)
+    {
+        for (i = 0; i <= carregados; i++)
+        {
+            if (strcmp(aux[i], word) == 0) //fun??o que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
+            {
+                j++; //contabiliza que houve resultado encontrado
+
+                if (i % 2 == 0) //Apenas exibe palavras em inglês.
+                {
+                    printf("\nPalavra: %s\n", aux[i]);
+                    printf("Traducao: %s\n\n", aux[i + 1]);
+                    fflush(stdin);
+                    if (escolhaCorrecao == 1)
+                    {
+                        printf("Digite a nova palavra:\n");
+                        gets(corrigeDicionario);
+                        strcpy(aux[i], corrigeDicionario);
+                        break;
+                    }
+                    else
+                    {
+                        printf("Digite o novo significado:\n");
+                        gets(corrigeDicionario);
+                        strcpy(aux[i + 1], corrigeDicionario);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    FimFuncao();
+}
+
 void Estudar()
 {
     int cont = 0; //variavel auxiliar
@@ -225,48 +314,7 @@ void Inserir()
     FimFuncao();
 }
 
-//Fun��o que ordena as palavras e remove os espa�os vazios ao salvar no arquivo
-void Ordenar()
-{
-    char orgPalavra[tamTex], orgTraducao[tamTex];
 
-    for (j = 0; j < carregados - 2; j = j + 2)
-    {
-        if (strcmp(aux[j], aux[j + 2]) == 0) //removendo os valores repetidos, estando em branco ou não
-        {
-            strcpy(aux[j + 2], "");
-            strcpy(aux[j + 3], "");
-        }
-        for (i = 0; i <= carregados - 4; i = i + 2)
-        {
-            if (strcmp(aux[j], aux[j + 2]) > 0)
-            {
-                strcpy(orgPalavra, aux[j]);
-                strcpy(orgTraducao, aux[j + 1]);
-
-                strcpy(aux[j], aux[j + 2]);
-                strcpy(aux[j + 1], aux[j + 3]);
-
-                strcpy(aux[j + 2], orgPalavra);
-                strcpy(aux[j + 3], orgTraducao);
-            }
-        }
-    }
-
-    txt = fopen(arquivo, "wb"); // abre o dicion�rio em modo de adicao para acrescentar mais palavras
-
-    for (i = 0; i <= carregados; i++)
-    {
-        if (strlen(aux[i]) > 0)           //ignora os valores vazios q continuarem salvos dentro do vetor
-            fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
-    }
-
-    fclose(txt); // fecha o dicionario
-
-    fflush(stdin); // usado no win para limpar o buffer do teclado
-    printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
-    getchar();
-}
 
 void RetirarPalavra()
 {
