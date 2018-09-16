@@ -57,7 +57,7 @@ int main()
 			}
 			case 5:
 			{
-				//Corrigir();
+				Corrigir();
 				break;
 			}
 			case 6:

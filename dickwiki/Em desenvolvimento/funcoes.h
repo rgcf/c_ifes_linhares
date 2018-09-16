@@ -2,7 +2,6 @@
 Esta � a biblioteca de fun��es do dicionario feito em 'C'.
 ************************************************************************************************************/
 #include <stdio.h>
-//#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -84,10 +83,6 @@ void Ordenar()
     }
 
     fclose(txt); // fecha o dicionario
-
-    fflush(stdin); // usado no win para limpar o buffer do teclado
-    printf("Dicionario reorganizado com sucesso\nPressione enter para voltar ao menu inicial.\n");
-    getchar();
 }
 // busca palavras/frases no dicionario
 void Buscar()
@@ -313,8 +308,6 @@ void Inserir()
 
     FimFuncao();
 }
-
-
 
 void RetirarPalavra()
 {
