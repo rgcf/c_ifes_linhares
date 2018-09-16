@@ -344,7 +344,7 @@ void Inserir()
         }
         fclose(txt); // fecha o dicionario
         printf("\nPalavra inserida com sucesso.\nDeseja inserir outra palavra?");
-    } while (!Confirma());
+    } while (Confirma());
 
     FimFuncao();
 }
@@ -383,7 +383,7 @@ void RetirarPalavra()
                     }
                     else
                     {
-                        printf("Confirma a exclus�o da palavra \"%s\" e sua traducao?", strupr(aux[i]));
+                        printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", strupr(aux[i]));
                         if (!Confirma())
                         {
                             printf("\nA palavra nao foi retirada do dicionario.\nPressione enter para retornar ao menu principal.\n");
@@ -415,6 +415,8 @@ void RetirarPalavra()
                 }
 
                 fclose(txt); // fecha o dicionario
+                printf("\nPalavra retirada do dicionario com sucesso!.");
+                return;
             }
         }
         else

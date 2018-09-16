@@ -63,6 +63,9 @@ int main()
 			case 6:
 			{
 				Ordenar();
+				printf("Dicionario ordenado com sucesso!\n");
+				FimFuncao();
+				fflush(stdin);
 				break;
 			}
 			case 7:
