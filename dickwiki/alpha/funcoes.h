@@ -6,7 +6,7 @@ Esta � a biblioteca de fun��es do dicionario feito em 'C'.
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define tamTex 251 //tamanho do texto que pode ser utilizado
+#define tamTex 251       //tamanho do texto que pode ser utilizado
 #define arquivo "db.txt" //definição do nome do arquivo de dados
 
 FILE *txt;
@@ -33,16 +33,16 @@ int Confirma()
         fflush(stdin);
         switch (conf)
         {
-            case 's':
-                return 1;
-            case 'S':
-                return 1;
-            case 'n':
-                return 0;
-            case 'N':
-                return 0;
-            default:
-                printf("\nValor invalido, por favor, tente novamente.\n");
+        case 's':
+            return 1;
+        case 'S':
+            return 1;
+        case 'n':
+            return 0;
+        case 'N':
+            return 0;
+        default:
+            printf("\nValor invalido, por favor, tente novamente.\n");
         }
     } while (1);
 }
@@ -194,7 +194,6 @@ void Corrigir()
         {
             if (strcmp(aux[i], word) == 0) //fun??o que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
             {
-                j++; //contabiliza que houve resultado encontrado
 
                 if (i % 2 == 0) //Apenas exibe palavras em inglês.
                 {
@@ -209,22 +208,31 @@ void Corrigir()
                         printf("Digite a nova palavra:\n");
                         gets(corrigeDicionario);
                         if (strlen(corrigeDicionario) > 0)
+                        {
                             strcpy(aux[i], corrigeDicionario);
+                            j++; //contabiliza que houve resultado encontrado e alterado
+                        }
                         else
                         {
                             printf("Valor invalido!");
+                            FimFuncao();
                             return;
-                        }                       break;
+                        }
+                        break;
                     }
                     else
                     {
                         printf("Digite o novo significado:\n");
                         gets(corrigeDicionario);
                         if (strlen(corrigeDicionario) > 0)
+                        {
                             strcpy(aux[i + 1], corrigeDicionario);
+                            j++; //contabiliza que houve resultado encontrado e alterado
+                        }
                         else
                         {
                             printf("Valor invalido!");
+                            FimFuncao();
                             return;
                         }
                         break;
@@ -243,8 +251,8 @@ void Corrigir()
             }
 
             fclose(txt); // fecha o dicionario
+            printf("\nDados alterados com sucesso!\n");
         }
-        printf("\nDados alterados com sucesso!\n");
     }
     else
     {
