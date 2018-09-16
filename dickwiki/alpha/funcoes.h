@@ -200,7 +200,7 @@ void Corrigir()
                     printf("Traducao: %s\n\n", aux[i + 1]);
                     fflush(stdin);
                     printf("O que deseja corrigir?\n");
-                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado:\n");
+                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado\n");
                     scanf("%d", &escolhaCorrecao);
                     fflush(stdin);
                     if (escolhaCorrecao == 1)

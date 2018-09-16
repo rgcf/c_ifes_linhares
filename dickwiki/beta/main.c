@@ -29,11 +29,11 @@ int main()
 		scanf("%d", &opcao);
 		fflush(stdin);
 		printf("\n");
-
+		system("cls");
 		switch (opcao)
 		{
 			case 0:
-				break;
+				exit(1);
 			case 1:
 			{
 				Visualizar();
@@ -41,13 +41,13 @@ int main()
 			}
 			case 2:
 			{
+				
 				Buscar();
 				break;
 			}
 			case 3:
 			{
 				Inserir();
-				fflush(stdin);
 				break;
 			}
 			case 4:
@@ -57,12 +57,15 @@ int main()
 			}
 			case 5:
 			{
-				//Corrigir();
+				Corrigir();
 				break;
 			}
 			case 6:
 			{
 				Ordenar();
+				printf("Dicionario ordenado com sucesso!\n");
+				FimFuncao();
+				fflush(stdin);
 				break;
 			}
 			case 7:
@@ -72,12 +75,12 @@ int main()
 			}
 			default:
 			{
-				printf("Opcao invalida, por favor, pressione enter para tentar novamente.");
+				printf("Opcao (%d) invalida, por favor, pressione enter para tentar novamente.", opcao);
 				getchar();
 				fflush(stdin);
 				break;
 			}
 		}
 	}while (opcao);
-	exit(0);
+	return 0;
 }

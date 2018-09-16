@@ -1,8 +1,7 @@
 /**********************************************************************************************************
-Esta � a biblioteca de fun��es do dicionario feito em 'C'.
+Esta é a biblioteca de funções do dicionario feito em 'C'.
 ************************************************************************************************************/
 #include <stdio.h>
-//#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -201,12 +200,14 @@ void Corrigir()
                     printf("Traducao: %s\n\n", aux[i + 1]);
                     fflush(stdin);
                     printf("O que deseja corrigir?\n");
-                    printf("Digite:\n 1 para corrigir a palavra\n2 para corrigir o significado:\n");
+                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado:\n");
                     scanf("%d", &escolhaCorrecao);
+                    fflush(stdin);
                     if (escolhaCorrecao == 1)
                     {
                         printf("Digite a nova palavra:\n");
                         gets(corrigeDicionario);
+                        fflush(stdin);
                         if (strlen(corrigeDicionario) > 0)
                         {
                             strcpy(aux[i], corrigeDicionario);
@@ -214,7 +215,7 @@ void Corrigir()
                         }
                         else
                         {
-                            printf("Valor invalido!");
+                            printf("\nValor invalido!\n");
                             FimFuncao();
                             return;
                         }
@@ -224,6 +225,7 @@ void Corrigir()
                     {
                         printf("Digite o novo significado:\n");
                         gets(corrigeDicionario);
+                        fflush(stdin);
                         if (strlen(corrigeDicionario) > 0)
                         {
                             strcpy(aux[i + 1], corrigeDicionario);
@@ -231,7 +233,7 @@ void Corrigir()
                         }
                         else
                         {
-                            printf("Valor invalido!");
+                            printf("\nValor invalido!\n");
                             FimFuncao();
                             return;
                         }
@@ -259,7 +261,7 @@ void Corrigir()
     }
     else
     {
-        printf("Valor invalido!");
+        printf("\nValor invalido!\n");
     }
     FimFuncao();
 }
@@ -416,6 +418,7 @@ void RetirarPalavra()
 
                 fclose(txt); // fecha o dicionario
                 printf("\nPalavra retirada do dicionario com sucesso!.");
+                FimFuncao();
                 return;
             }
         }
