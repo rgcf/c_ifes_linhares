@@ -202,6 +202,7 @@ void Corrigir()
                     printf("O que deseja corrigir?\n");
                     printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado:\n");
                     scanf("%d", &escolhaCorrecao);
+                    fflush(stdin);
                     if (escolhaCorrecao == 1)
                     {
                         printf("Digite a nova palavra:\n");
