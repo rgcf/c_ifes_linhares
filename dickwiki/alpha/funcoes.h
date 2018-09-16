@@ -415,6 +415,8 @@ void RetirarPalavra()
                 }
 
                 fclose(txt); // fecha o dicionario
+                printf("\nPalavra retirada do dicionario com sucesso!.");
+                return;
             }
         }
         else
