@@ -13,6 +13,13 @@ FILE *txt;
 char aux[1000][tamTex], word[tamTex];
 int carregados, i, j;
 
+void FimFuncao()
+{
+    fflush(stdin); //Esvazia o buffer do teclado
+    printf("Pressione enter para voltar ao menu inicial.\n");
+    getchar(); //pausa para retornar ao menu inicial
+}
+
 //Função para confirmar, retornando 1 para sim e 0 para não
 int Confirma()
 {
@@ -24,20 +31,20 @@ int Confirma()
         fflush(stdin);
         switch (conf)
         {
-            case 's':
-                return 1;
-            case 'S':
-                return 1;
-            case 'n':
-                return 0;
-            case 'N':
-                return 0;
-            default:
-            {
-                printf("\nValor invalido, por favor, tente novamente.\n");
-            }
+        case 's':
+            return 1;
+        case 'S':
+            return 1;
+        case 'n':
+            return 0;
+        case 'N':
+            return 0;
+        default:
+        {
+            printf("\nValor invalido, por favor, tente novamente.\n");
         }
-    }while(1);
+        }
+    } while (1);
 }
 
 // busca palavras/frases no dicionario
@@ -77,8 +84,7 @@ void Buscar()
     if (!locate)
         printf("\nPalavra nao localizada.\n");
 
-    printf("Pressione enter para continuar.\n");
-    getchar();
+    FimFuncao();
 }
 
 //Fun��o para o carregamento das palavras dentro do vetor
@@ -96,7 +102,7 @@ void Carregar()
 
     //Verificando se o arquivo de dados existe ou não
     //Caso não exista, é permitido que o usuário crie um novo ou encerre o programa
-    if (!txt)  
+    if (!txt)
     {
         system("cls");
         printf("Erro ao abrir o arquivo de dados.\n");
@@ -136,95 +142,87 @@ void Carregar()
 
 void Estudar()
 {
-    int ap = 0, sair = 0, cont = 0, pqp = 0; //variaveis auxiliares
+    int cont = 0; //variavel auxiliar
     i = 0;
 
-    printf("%d", carregados);
-    while (sair != 2)
+    do
     {
-        system("pause");
         system("cls");
+
         if (cont != (carregados - 1) / 2)
         {
             srand(time(NULL)); //faz com que se gere novos numeros caso crie outra matriz ou compile novamente
             do
             {
-                pqp++;
                 i = rand() % (carregados - 1); //preenche randomicamente com numeros aleatorios
                 if (i % 2 != 0)
-                {
                     i--;
-                }
-                printf("%d", pqp);
             } while (strcmp(aux[i], aux[i + 1]) == 0);
 
             fflush(stdin);
-            getchar();
-
             printf("**************************************");
             printf("\nPalavra:  %s", aux[i]);
             printf("\n**************************************");
-            printf("\n\n\nPressione enter para exibir a traducao.\n");
+            printf("\n\nPressione enter para exibir a traducao.\n");
+
             getchar();
             fflush(stdin);
             printf("\n**************************************");
             printf("\nTraducao:  %s", aux[i + 1]);
             printf("\n**************************************");
-            printf("\n\n\nTeve dificuldade?\n 1 - Sim\n 2 - Nao\n Resposta:");
-            scanf("%d", &ap);
-            if (ap == 2)
+            printf("\n\nTeve dificuldade?\n");
+
+            if (!Confirma())
             {
                 strcpy(aux[i], "");
                 strcpy(aux[i + 1], "");
                 cont++;
             }
-            ap = 0;
-            printf("\n Deseja continuar estudando?\n 1 - Sim \n 2 - Nao\n Resposta:");
-            scanf("%d", &sair);
         }
         else
         {
-            printf("\n \t !!!!!! Parabens, voce completou o Dicionario !!!!!!\n\n \t        ** Aperte enter para voltar ao menu **  ");
-            fflush(stdin);
-            getchar();
-            break;
+            printf("\n \t !!!!!! Parabens, voce completou o Dicionario !!!!!!\n\n");
+            FimFuncao();
+            return;
         }
-    }
+        
+        printf("\nDeseja continuar estudando?\n");
+    }while (Confirma());
 }
 
 //Fun��o para inclus�o de novas palavras
 void Inserir()
 {
     char palavra[tamTex]; // considerar o '\0'
-
-    txt = fopen(arquivo, "rb"); // abre o dicion�rio
-
-    // erro caso n�o encontre o arquivo de bd do dicion�rio
-    if (txt == NULL)
+    do
     {
-        printf("Erro, nao foi possivel abrir o banco de dados do dicionario.\n");
-    }
-    else
-    {
-        txt = fopen(arquivo, "ab"); // abre o dicion�rio em modo de adi??o/acrescentar mais palavras
+        txt = fopen(arquivo, "rb"); // abre o dicion�rio
 
-        printf("Digite a palavra em ingles:\n");
-        fflush(stdin); // usado no win para limpar o buffer do teclado
-        fgets(palavra, tamTex, stdin); //stdin eh o teclado
-        fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
+        // erro caso n�o encontre o arquivo de bd do dicion�rio
+        if (txt == NULL)
+        {
+            printf("Erro, nao foi possivel abrir o banco de dados do dicionario.\n");
+        }
+        else
+        {
+            txt = fopen(arquivo, "ab"); // abre o dicionário em modo de adição/acrescentar mais palavras
 
-        //----------------------------//add tradu??o
-        printf("Digite a traducao:\n");
-        fflush(stdin); // usado no win para limpar o buffer do teclado
-        fgets(palavra, tamTex, stdin); //stdin eh o teclado
-        fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
-    }
-    fclose(txt); // fecha o dicionario
+            printf("Digite a palavra em ingles:\n");
+            fflush(stdin);                 // usado no win para limpar o buffer do teclado
+            fgets(palavra, tamTex, stdin); //stdin eh o teclado
+            fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
 
-    fflush(stdin); // usado no win para limpar o buffer do teclado
-    printf("Pressione enter para voltar ao menu inicial.\n");
+            //----------------------------//add tradução
+            printf("Digite a traducao:\n");
+            fflush(stdin);                 // usado no win para limpar o buffer do teclado
+            fgets(palavra, tamTex, stdin); //stdin eh o teclado
+            fprintf(txt, "%s", palavra);   // salva a palavra o BD e quebra a linha
+        }
+        fclose(txt); // fecha o dicionario
+        printf("\nPalavra inserida com sucesso.\nDeseja inserir outra palavra?");
+    } while (!Confirma());
 
-    getchar(); //pausa para retornar ao menu inicial
+    FimFuncao();
 }
 
 //Fun��o que ordena as palavras e remove os espa�os vazios ao salvar no arquivo
@@ -232,7 +230,7 @@ void Ordenar()
 {
     char orgPalavra[tamTex], orgTraducao[tamTex];
 
-    for (j = 0; j < carregados; j = j + 2)
+    for (j = 0; j < carregados - 2; j = j + 2)
     {
         if (strcmp(aux[j], aux[j + 2]) == 0) //removendo os valores repetidos, estando em branco ou não
         {
@@ -241,16 +239,16 @@ void Ordenar()
         }
         for (i = 0; i <= carregados - 4; i = i + 2)
         {
-            if (strcmp(aux[i], aux[i + 2]) > 0)
+            if (strcmp(aux[j], aux[j + 2]) > 0)
             {
-                strcpy(orgPalavra, aux[i]);
-                strcpy(orgTraducao, aux[i + 1]);
+                strcpy(orgPalavra, aux[j]);
+                strcpy(orgTraducao, aux[j + 1]);
 
-                strcpy(aux[i], aux[i + 2]);
-                strcpy(aux[i + 1], aux[i + 3]);
+                strcpy(aux[j], aux[j + 2]);
+                strcpy(aux[j + 1], aux[j + 3]);
 
-                strcpy(aux[i + 2], orgPalavra);
-                strcpy(aux[i + 3], orgTraducao);
+                strcpy(aux[j + 2], orgPalavra);
+                strcpy(aux[j + 3], orgTraducao);
             }
         }
     }
@@ -259,7 +257,7 @@ void Ordenar()
 
     for (i = 0; i <= carregados; i++)
     {
-        if (strlen(aux[i]) > 0)           //remove os valores vazios q continuarem salvos dentro do vetor
+        if (strlen(aux[i]) > 0)           //ignora os valores vazios q continuarem salvos dentro do vetor
             fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
     }
 
@@ -272,52 +270,77 @@ void Ordenar()
 
 void RetirarPalavra()
 {
-    printf("Digite a palavra que deseja retirar: ");
-    fflush(stdin); // usado no win para limpar o buffer do teclado
-    gets(word);
-    //system("cls");
-
-    if (strlen(word) > 0) //conta o tamanho da palavra e verifica se ela é maior que 0
+    j = 0;
+    do
     {
-        for (i = 0; i <= carregados; i++)
+
+        printf("Digite a palavra que deseja retirar: ");
+        fflush(stdin); // usado no win para limpar o buffer do teclado
+        gets(word);
+        //system("cls");
+
+        if (strlen(word) > 0) //conta o tamanho da palavra e verifica se ela é maior que 0
         {
-            if (strcmp(aux[i], word) == 0) //fun??o que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
+            for (i = 0; i <= carregados; i++)
             {
-                if (i % 2 == 0) //Verifica se a palavra buscada est� em portugu�s ou em ingl�s para retornar sua tradu��o.
+                if (strcmp(aux[i], word) == 0) //fun??o que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
                 {
-                    printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", strupr(aux[i]));
-                    if (Confirma())
+                    j++;
+                    if (i % 2 == 0) //Verifica se a palavra buscada est� em portugu�s ou em ingl�s para retornar sua tradu��o.
+                    {
+                        printf("Confirma a exclusao da palavra \"%s\" e sua traducao?", strupr(aux[i]));
+                        if (!Confirma())
+                        {
+                            printf("\nA palavra nao foi retirada do dicionario.\nPressione enter para retornar ao menu principal.\n");
+                            fflush(stdin);
+                            getchar();
+                            return;
+                        }
+                        strcpy(aux[i], "");
+                        strcpy(aux[i + 1], "");
                         break;
-                    strcpy(aux[i], "");
-                    strcpy(aux[i + 1], "");
-                    break;
-                }
-                else
-                {
-                    printf("Confirma a exclus�o da palavra \"%s\" e sua traducao?", strupr(aux[i]));
-                    if (Confirma())
+                    }
+                    else
+                    {
+                        printf("Confirma a exclus�o da palavra \"%s\" e sua traducao?", strupr(aux[i]));
+                        if (!Confirma())
+                        {
+                            printf("\nA palavra nao foi retirada do dicionario.\nPressione enter para retornar ao menu principal.\n");
+                            fflush(stdin);
+                            getchar();
+                            return;
+                        }
+                        strcpy(aux[i], "");
+                        strcpy(aux[i - 1], "");
                         break;
-                    strcpy(aux[i], "");
-                    strcpy(aux[i - 1], "");
-                    break;
+                    }
                 }
             }
+            if(!j)
+            {
+                printf("\nPalavra nao localizada.\n");
+                printf("\nDeseja buscar novamente?\n");
+                if(!Confirma())
+                    return;
+            }
+            else
+            {
+                txt = fopen(arquivo, "wb"); // abre o dicion�rio em modo de adicao para acrescentar mais palavras
+
+                for (i = 0; i <= carregados; i++)
+                {
+                    if (strlen(aux[i]) > 0)           //remove os valores vazios q continuarem salvos dentro do vetor
+                        fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
+                }
+
+                fclose(txt); // fecha o dicionario
+            }
         }
-
-        txt = fopen(arquivo, "wb"); // abre o dicion�rio em modo de adicao para acrescentar mais palavras
-
-        for (i = 0; i <= carregados; i++)
+        else
         {
-            if (strlen(aux[i]) > 0)           //remove os valores vazios q continuarem salvos dentro do vetor
-                fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
+            printf("\nNenhuma palavra digitada, tente novamente. \n");
         }
-
-        fclose(txt); // fecha o dicionario
-    }
-    else
-    {
-    printf("\nNenhuma palavra digitada, tente novamente. \n");
-    }
+    } while (1);
 }
 
 void Visualizar()
@@ -348,7 +371,5 @@ void Visualizar()
     else
         printf("Dicionario vazio, insira novas palavras.\n\n");
 
-    fflush(stdin); //Esvazia o buffer do teclado
-    printf("Pressione enter para voltar ao menu inicial.\n");
-    getchar(); //pausa para retornar ao menu inicial
+    FimFuncao();
 }
