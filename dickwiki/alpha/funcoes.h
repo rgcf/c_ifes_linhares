@@ -1,8 +1,7 @@
 /**********************************************************************************************************
-Esta � a biblioteca de fun��es do dicionario feito em 'C'.
+Esta é a biblioteca de funções do dicionario feito em 'C'.
 ************************************************************************************************************/
 #include <stdio.h>
-//#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
