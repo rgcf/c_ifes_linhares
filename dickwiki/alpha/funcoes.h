@@ -184,7 +184,7 @@ void Corrigir()
     int escolhaCorrecao;
     j = 0;
 
-    printf("\n\nDigite a palavra que deseja corrigir e pressione enter:\n");
+    printf("Digite a palavra que deseja corrigir e pressione enter:\n");
     fflush(stdin); // usado no win para limpar o buffer do teclado
     gets(word);
 
@@ -240,6 +240,7 @@ void Corrigir()
                 }
             }
         }
+        //Faz a verificação se houve ou não alteração na palavra ou significado, para poder salvar no arquivo de dados
         if (j)
         {
             txt = fopen(arquivo, "wb"); // abre o dicionï¿½rio em modo de adicao para acrescentar mais palavras
@@ -253,6 +254,8 @@ void Corrigir()
             fclose(txt); // fecha o dicionario
             printf("\nDados alterados com sucesso!\n");
         }
+        else
+            printf("\nPalavra nao localizada.\n");
     }
     else
     {
