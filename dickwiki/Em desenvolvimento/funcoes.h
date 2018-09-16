@@ -2,16 +2,19 @@
 Esta � a biblioteca de fun��es do dicionario feito em 'C'.
 ************************************************************************************************************/
 #include <stdio.h>
+//#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define tamTex 251
-#define arquivo "db.txt"
+#define tamTex 251 //tamanho do texto que pode ser utilizado
+#define arquivo "db.txt" //definição do nome do arquivo de dados
 
 FILE *txt;
+//Variaveis globais
 char aux[1000][tamTex], word[tamTex];
 int carregados, i, j;
 
+//Função que solicita uma ação do usuário para continuar
 void FimFuncao()
 {
     fflush(stdin); //Esvazia o buffer do teclado
@@ -30,18 +33,16 @@ int Confirma()
         fflush(stdin);
         switch (conf)
         {
-        case 's':
-            return 1;
-        case 'S':
-            return 1;
-        case 'n':
-            return 0;
-        case 'N':
-            return 0;
-        default:
-        {
-            printf("\nValor invalido, por favor, tente novamente.\n");
-        }
+            case 's':
+                return 1;
+            case 'S':
+                return 1;
+            case 'n':
+                return 0;
+            case 'N':
+                return 0;
+            default:
+                printf("\nValor invalido, por favor, tente novamente.\n");
         }
     } while (1);
 }
@@ -96,7 +97,7 @@ void Buscar()
     {
         for (i = 0; i <= carregados; i++)
         {
-            if (strcmp(aux[i], word) == 0) //fun??o que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
+            if (strcmp(aux[i], word) == 0) //função que faz a compara??o entre a quantidade de caracteres de duas strings, limita a quantidade de caracteres da palavra digitada.
             {
                 locate++; //contabiliza que houve resultado encontrado
 
@@ -179,13 +180,10 @@ void Carregar()
 
 void Corrigir()
 {
-    char corrigeDicionario[tamTex]; 
+    char corrigeDicionario[tamTex];
     int escolhaCorrecao;
     j = 0;
-    printf("O que deseja corrigir?\n");
-    printf("Digite:\n 1 para corrigir a palavra\n2 para corrigir o significado:\n");
-    scanf("%d", &escolhaCorrecao);
-    
+
     printf("\n\nDigite a palavra que deseja corrigir e pressione enter:\n");
     fflush(stdin); // usado no win para limpar o buffer do teclado
     gets(word);
@@ -203,23 +201,54 @@ void Corrigir()
                     printf("\nPalavra: %s\n", aux[i]);
                     printf("Traducao: %s\n\n", aux[i + 1]);
                     fflush(stdin);
+                    printf("O que deseja corrigir?\n");
+                    printf("Digite:\n 1 para corrigir a palavra\n2 para corrigir o significado:\n");
+                    scanf("%d", &escolhaCorrecao);
                     if (escolhaCorrecao == 1)
                     {
                         printf("Digite a nova palavra:\n");
                         gets(corrigeDicionario);
-                        strcpy(aux[i], corrigeDicionario);
-                        break;
+                        if (strlen(corrigeDicionario) > 0)
+                            strcpy(aux[i], corrigeDicionario);
+                        else
+                        {
+                            printf("Valor invalido!");
+                            return;
+                        }                       break;
                     }
                     else
                     {
                         printf("Digite o novo significado:\n");
                         gets(corrigeDicionario);
-                        strcpy(aux[i + 1], corrigeDicionario);
+                        if (strlen(corrigeDicionario) > 0)
+                            strcpy(aux[i + 1], corrigeDicionario);
+                        else
+                        {
+                            printf("Valor invalido!");
+                            return;
+                        }
                         break;
                     }
                 }
             }
         }
+        if (j)
+        {
+            txt = fopen(arquivo, "wb"); // abre o dicionï¿½rio em modo de adicao para acrescentar mais palavras
+
+            for (i = 0; i <= carregados; i++)
+            {
+                if (strlen(aux[i]) > 0)           //ignora os valores vazios q continuarem salvos dentro do vetor
+                    fprintf(txt, "%s\n", aux[i]); //grava os valores dentro do arquivo txt
+            }
+
+            fclose(txt); // fecha o dicionario
+        }
+        printf("\nDados alterados com sucesso!\n");
+    }
+    else
+    {
+        printf("Valor invalido!");
     }
     FimFuncao();
 }
@@ -269,9 +298,9 @@ void Estudar()
             FimFuncao();
             return;
         }
-        
+
         printf("\nDeseja continuar estudando?\n");
-    }while (Confirma());
+    } while (Confirma());
 }
 
 //Fun��o para inclus�o de novas palavras
@@ -357,11 +386,11 @@ void RetirarPalavra()
                     }
                 }
             }
-            if(!j)
+            if (!j)
             {
                 printf("\nPalavra nao localizada.\n");
                 printf("\nDeseja buscar novamente?\n");
-                if(!Confirma())
+                if (!Confirma())
                     return;
             }
             else

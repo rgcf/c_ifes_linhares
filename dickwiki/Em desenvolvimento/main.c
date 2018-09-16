@@ -57,14 +57,12 @@ int main()
 			}
 			case 5:
 			{
-				//Corrigir();
+				Corrigir();
 				break;
 			}
 			case 6:
 			{
 				Ordenar();
-				printf("Dicionario ordenado com sucesso!\n");
-				FimFuncao();
 				break;
 			}
 			case 7:
