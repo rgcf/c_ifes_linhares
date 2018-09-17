@@ -1,10 +1,12 @@
 air
 ar
+airplane
+aviao
+apple
+maca
 car
 carro
 coffee
 cafe
 dog
 cachorro
-water
-agua

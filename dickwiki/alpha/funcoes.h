@@ -1,10 +1,6 @@
 /**********************************************************************************************************
 Esta é a biblioteca de funções do dicionario feito em 'C'.
 ************************************************************************************************************/
-#ifdef _funcoesDicionario_
-#else
-#define _funcoesDicionario_
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,16 +60,16 @@ void Ordenar()
         }
         for (i = 0; i <= carregados - 4; i = i + 2)
         {
-            if (strcmp(aux[j], aux[j + 2]) > 0)
+            if (strcmp(aux[i], aux[i + 2]) > 0)
             {
-                strcpy(orgPalavra, aux[j]);
-                strcpy(orgTraducao, aux[j + 1]);
+                strcpy(orgPalavra, aux[i]);
+                strcpy(orgTraducao, aux[i + 1]);
 
-                strcpy(aux[j], aux[j + 2]);
-                strcpy(aux[j + 1], aux[j + 3]);
+                strcpy(aux[i], aux[i + 2]);
+                strcpy(aux[i + 1], aux[i + 3]);
 
-                strcpy(aux[j + 2], orgPalavra);
-                strcpy(aux[j + 3], orgTraducao);
+                strcpy(aux[i + 2], orgPalavra);
+                strcpy(aux[i + 3], orgTraducao);
             }
         }
     }
@@ -204,7 +200,7 @@ void Corrigir()
                     printf("Traducao: %s\n\n", aux[i + 1]);
                     fflush(stdin);
                     printf("O que deseja corrigir?\n");
-                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado\n");
+                    printf("Digite:\n1 para corrigir a palavra\n2 para corrigir o significado:\n");
                     scanf("%d", &escolhaCorrecao);
                     fflush(stdin);
                     if (escolhaCorrecao == 1)
@@ -463,4 +459,3 @@ void Visualizar()
 
     FimFuncao();
 }
-#endif
